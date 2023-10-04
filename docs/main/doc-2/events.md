@@ -54,7 +54,7 @@
       }
     }
 
-Джава![копировать значок](../../../../_/img/octicons-16.svg#view-clippy)Скопировано!
+
 
 Если вы хотите перенаправить текущий запрос на новый URL-адрес, вы можете использовать [`WebUtils.issueRedirect`](https://shiro.apache.org/static/1.4.1/apidocs/org/apache/shiro/web/util/WebUtils.html#issueRedirect(javax.servlet.ServletRequest,javax.servlet.ServletResponse,java.lang.String)).
 
@@ -100,7 +100,7 @@
       }
     }
 
-Джава![копировать значок](../../../../_/img/octicons-16.svg#view-clippy)Скопировано!
+
 
 ### [](#request-events)Запросить события
 
@@ -169,7 +169,7 @@
       }
     }
 
-Джава![копировать значок](../../../../_/img/octicons-16.svg#view-clippy)Скопировано!
+
 
 #### [](#workflow-status-tags)Теги статуса рабочего процесса
 
@@ -187,7 +187,7 @@ _Новое в версии 5.4_
       }
     }
 
-Джава![копировать значок](../../../../_/img/octicons-16.svg#view-clippy)Скопировано!
+
 
 `status`должен быть список карт со следующими ключами:
 
@@ -226,7 +226,7 @@ _Новое в версии 5.4_
       }
     }
 
-Джава![копировать значок](../../../../_/img/octicons-16.svg#view-clippy)Скопировано!
+
 
 ### [](#event-source)Источник события
 
@@ -245,7 +245,7 @@ _Новое в версии 5.4_
       }
     }
 
-Джава![копировать значок](../../../../_/img/octicons-16.svg#view-clippy)Скопировано!
+
 
 **1**
 
@@ -265,7 +265,7 @@ _Новое в версии 5.4_
       }
     }
 
-Джава![копировать значок](../../../../_/img/octicons-16.svg#view-clippy)Скопировано!
+
 
 ### [](#qualifiers)Квалификации
 
@@ -292,7 +292,7 @@ _Новое в версии 5.4_
       }
     }
 
-Джава![копировать значок](../../../../_/img/octicons-16.svg#view-clippy)Скопировано!
+
 
     public class ContactObserver {
     
@@ -310,4 +310,3 @@ _Новое в версии 5.4_
       }
     }
 
-Джава![копировать значок](../../../../_/img/octicons-16.svg#view-clippy)Скопировано!
