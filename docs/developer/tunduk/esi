@@ -1,0 +1,8 @@
+Мы произвели интгерацию ЕСИ по документации от Tunduk.
+Ccылка https://wiki.tunduk.kg/doku.php?id=iis-info&s[]=еси#протокол_работы_еси
+
+Endpoints:
+  http://localhost:8080/axelor-erp/login/esi-link - Генерирует ссылку для входа через ЕСИ.
+
+  http://localhost:8080/axelor-erp/login/esi?token='token' - Производит авторизацию
+  и выдает нам access токен для получения мета данных пользователя.
