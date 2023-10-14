@@ -19,6 +19,7 @@
 - Правильное использования
 
 ## Оглавление
-- [Что-то](./test-functional/doc.md)
-- [Что-то2](./test-functional2.md)
+- [i18n для AngularJs](./i18n/i18n.md)
+- [Еси](./tunduk/esi)
+- [Интеграция с Тундук](./tunduk/integration.md)
 - Пока ещё в изучении...
