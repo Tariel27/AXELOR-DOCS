@@ -2,16 +2,15 @@
 
 ## Оглавление
 
-1. Введение
-2. Предварительные условия
-3. Установка
-4. Использование
-5. Структура кода
-6. Функции/методы
-7. Занятия
-8. Конфигурация
-9. Примеры
-10. [Устранение неполадок](#10-устранение-неполадок)
+1. [Введение](#1-введение)
+2. [Предварительные условия](#2-предварительные-условия)
+3. [Установка](#3-установка)
+4. [Использование](#4-использование)
+5. [Структура кода](#5-структура-кода)
+6. [Функции/методы](#6-функцииметоды)
+7. [Занятия](#7-классы)
+8. [Конфигурация](#8-конфигурация)
+9. [Примеры](#9-примеры)
 
 ## 1. Введение
 
@@ -459,35 +458,382 @@ public abstract class BaseTundukProvider<T> implements Provider<T> {
 
 ## 6. Функции/методы
 
-Перечислите и задокументируйте функции или методы, включенные в код, объяснив их назначение, параметры и возвращаемые
-значения. Включите примеры кода для каждой функции.
+Здесь я перечислю только те методы которые вам необходимо знать.
 
+- `TundukService`
+  - `setServiceCode` - переопределить значения двух полей из DTO(Service)
+  - `abstract setHandler` - устанавливает обработчик к веб-сервису.
+- `BaseHandler`
+  - `handleMessage` - метод который вызывается до и после отправки запроса.
+  - `setService, setClient` - установка параметр в заголовок запроса.
+- `BaseMapper`
+  - `parse` - конвертация из одного объекта в другой.
+  - `responseIsNull, customMessage, successMessage, errorMessage` - для логов.
+- `BaseTundukProvider`
+  - `getHeader` - возвращает экземпляр DTO-заголовка
+  - `getService` - возвращает экземпляр DTO-сервиса с указанными параметрами.
+  - `getClient` - возвращает экземпляр DTO-клиента с указанными параметрами.
+  - `getHandler` - возвращает экземпляр _Хендлер_ с указанными параметрами.
+  - `getWsdlUrl` - возвращает экземпляр **URL** до WSDL.
 ## 7. Классы
 
-Перечислите и задокументируйте классы в коде, включая их атрибуты и методы. Объясните, как использовать каждый класс, и
-при необходимости приведите примеры.
+```text
+├───integrations
+│   │
+│   ├───tunduk
+│   │   ├───exception
+│   │   │       TundukException.java
+│   │   │
+│   │   ├───handler
+│   │   │       BaseHandler.java
+│   │   │       MinJustHandler.java
+│   │   │       PassportHandler.java
+│   │   │       VehicleHandler.java
+│   │   │       ZagsHandler.java
+│   │   │
+│   │   ├───helper
+│   │   │       DateHelper.java
+│   │   │
+│   │   ├───mapper
+│   │   │   │   BaseMapper.java
+│   │   │   │
+│   │   │   ├───minjust
+│   │   │   │       MinJustMapper.java
+│   │   │   │
+│   │   │   ├───passport
+│   │   │   │       PassportDataByPSNMapper.java
+│   │   │   │       PassportMapper.java
+│   │   │   │
+│   │   │   ├───vehicle
+│   │   │   │       VehicleCarCheckByGovPlateResponseMapper.java
+│   │   │   │       VehicleMapper.java
+│   │   │   │
+│   │   │   └───zags
+│   │   │           ZagsMapper.java
+│   │   │
+│   │   ├───service
+│   │   │   │   TundukService.java
+│   │   │   │
+│   │   │   ├───minjust
+│   │   │   │       MinJustService.java
+│   │   │   │
+│   │   │   ├───passport
+│   │   │   │       PassportService.java
+│   │   │   │
+│   │   │   ├───vehicle
+│   │   │   │       VehicleService.java
+│   │   │   │
+│   │   │   └───zags
+│   │   │           ZagsService.java
+│   │   │
+│   │   └───web_service
+│   │       ├───dto
+│   │       │       Client.java
+│   │       │       Header.java
+│   │       │       Service.java
+│   │       │
+│   │       ├───minjust
+│   │       │   └───kg
+│   │       │       └───gov
+│   │       │           └───tunduk
+│   │       │                   Founder.java
+│   │       │                   GetSubjectByNameRequest.java
+│   │       │                   GetSubjectByNameResponse.java
+│   │       │                   GetSubjectByQueryRequest.java
+│   │       │                   GetSubjectByQueryResponse.java
+│   │       │                   GetSubjectByTinRequest.java
+│   │       │                   GetSubjectByTinResponse.java
+│   │       │                   ObjectFactory.java
+│   │       │                   package-info.java
+│   │       │                   QueryType.java
+│   │       │                   Subject.java
+│   │       │                   SubjectPort.java
+│   │       │                   SubjectPortService.java
+│   │       │
+│   │       ├───passport
+│   │       │       BankPinService.java
+│   │       │       BankPinServiceResponse.java
+│   │       │       InfocomService.java
+│   │       │       InfocomServicePortType.java
+│   │       │       LostPassportsByMonth.java
+│   │       │       LostPassportsByMonthResponse.java
+│   │       │       Notes.java
+│   │       │       ObjectFactory.java
+│   │       │       package-info.java
+│   │       │       PassportDataByPin.java
+│   │       │       PassportDataByPinResponse.java
+│   │       │       PassportDataByPSN.java
+│   │       │       PassportDataByPSNResponse.java
+│   │       │       PassportDataForInfosystema.java
+│   │       │       PassportDataForInfosystemaResponse.java
+│   │       │       PassportLastPhotoByPin.java
+│   │       │       PassportLastPhotoByPinResponse.java
+│   │       │       PassportSearchByNSPDate.java
+│   │       │       PassportSearchByNSPDateResponse.java
+│   │       │       PassportStatus.java
+│   │       │       PassportStatusResponse.java
+│   │       │       RequestHash.java
+│   │       │       StatusByPassportData.java
+│   │       │       StatusByPassportDataResponse.java
+│   │       │       TechNotes.java
+│   │       │       TestBankPinService.java
+│   │       │       TestBankPinServiceResponse.java
+│   │       │       TestPassportDataByPSN.java
+│   │       │       TestPassportDataByPSNResponse.java
+│   │       │       Title.java
+│   │       │       XRoadCentralServiceIdentifierType.java
+│   │       │       XRoadClientIdentifierType.java
+│   │       │       XRoadGlobalGroupIdentifierType.java
+│   │       │       XRoadIdentifierType.java
+│   │       │       XRoadLocalGroupIdentifierType.java
+│   │       │       XRoadObjectType.java
+│   │       │       XRoadSecurityCategoryIdentifierType.java
+│   │       │       XRoadSecurityServerIdentifierType.java
+│   │       │       XRoadServiceIdentifierType.java
+│   │       │
+│   │       ├───vehicle
+│   │       │       Arests.java
+│   │       │       CarCheckByGovPlate.java
+│   │       │       CarCheckByGovPlateResponse.java
+│   │       │       CarCheckFree.java
+│   │       │       CarCheckFreeResponse.java
+│   │       │       CarCheckGeneratePayment.java
+│   │       │       CarCheckGeneratePaymentResponse.java
+│   │       │       CarCheckGeneratePaymentTest.java
+│   │       │       CarCheckGeneratePaymentTestResponse.java
+│   │       │       CarCheckPaid.java
+│   │       │       CarCheckPaidResponse.java
+│   │       │       CarCheckPaidTest.java
+│   │       │       CarCheckPaidTestResponse.java
+│   │       │       Cars.java
+│   │       │       CertificateStatus.java
+│   │       │       CertificateStatusResponse.java
+│   │       │       Data.java
+│   │       │       InfocomService.java
+│   │       │       InfocomServicePortType.java
+│   │       │       Notes.java
+│   │       │       ObjectFactory.java
+│   │       │       package-info.java
+│   │       │       RecordsByDate.java
+│   │       │       RecordsByDateResponse.java
+│   │       │       RequestHash.java
+│   │       │       TechNotes.java
+│   │       │       TestTransportByPin.java
+│   │       │       TestTransportByPinResponse.java
+│   │       │       Title.java
+│   │       │       Transport.java
+│   │       │       TransportArestByGovPlate.java
+│   │       │       TransportArestByGovPlateResponse.java
+│   │       │       TransportByPin.java
+│   │       │       TransportByPinResponse.java
+│   │       │       TransportCarInfoWithHistory.java
+│   │       │       TransportCarInfoWithHistoryResponse.java
+│   │       │       TransportCurrentArestInfo.java
+│   │       │       TransportCurrentArestInfoResponse.java
+│   │       │       TransportCurrentInfo.java
+│   │       │       TransportCurrentInfoResponse.java
+│   │       │       TransportDataByVin.java
+│   │       │       TransportDataByVinBrandPeriod.java
+│   │       │       TransportDataByVinBrandPeriodResponse.java
+│   │       │       TransportDataByVinResponse.java
+│   │       │       TransportOwnersPeriod.java
+│   │       │       TransportOwnersPeriodResponse.java
+│   │       │       TransportReferenceBrand.java
+│   │       │       TransportReferenceBrandResponse.java
+│   │       │       TransportReferenceColor.java
+│   │       │       TransportReferenceColorResponse.java
+│   │       │       TransportReferenceModel.java
+│   │       │       TransportReferenceModelResponse.java
+│   │       │       TransportSearchByFullname.java
+│   │       │       TransportSearchByFullnameResponse.java
+│   │       │       TransportSearchByParameters.java
+│   │       │       TransportSearchByParametersResponse.java
+│   │       │       TransportStatement.java
+│   │       │       TransportStatementResponse.java
+│   │       │       TransportStatusByGovPlate.java
+│   │       │       TransportStatusByGovPlateResponse.java
+│   │       │       TransportVinByGovPlate.java
+│   │       │       TransportVinByGovPlateResponse.java
+│   │       │       TsMonitoringGeneralStatistics.java
+│   │       │       TsMonitoringGeneralStatisticsResponse.java
+│   │       │       TsMonitoringRegionStatistics.java
+│   │       │       TsMonitoringRegionStatisticsResponse.java
+│   │       │       XRoadCentralServiceIdentifierType.java
+│   │       │       XRoadClientIdentifierType.java
+│   │       │       XRoadGlobalGroupIdentifierType.java
+│   │       │       XRoadIdentifierType.java
+│   │       │       XRoadLocalGroupIdentifierType.java
+│   │       │       XRoadObjectType.java
+│   │       │       XRoadSecurityCategoryIdentifierType.java
+│   │       │       XRoadSecurityServerIdentifierType.java
+│   │       │       XRoadServiceIdentifierType.java
+│   │       │
+│   │       └───zags
+│   │           ├───eu
+│   │           │   └───x_road
+│   │           │       └───xsd
+│   │           │           ├───identifiers
+│   │           │           │       ObjectFactory.java
+│   │           │           │       package-info.java
+│   │           │           │       XRoadCentralServiceIdentifierType.java
+│   │           │           │       XRoadClientIdentifierType.java
+│   │           │           │       XRoadGlobalGroupIdentifierType.java
+│   │           │           │       XRoadIdentifierType.java
+│   │           │           │       XRoadLocalGroupIdentifierType.java
+│   │           │           │       XRoadObjectType.java
+│   │           │           │       XRoadSecurityCategoryIdentifierType.java
+│   │           │           │       XRoadSecurityServerIdentifierType.java
+│   │           │           │       XRoadServiceIdentifierType.java
+│   │           │           │
+│   │           │           └───xroad
+│   │           │                   Notes.java
+│   │           │                   ObjectFactory.java
+│   │           │                   package-info.java
+│   │           │                   RequestHash.java
+│   │           │                   TechNotes.java
+│   │           │                   Title.java
+│   │           │
+│   │           └───fi
+│   │               └───x_road
+│   │                   └───tunduk_seccurity_infocom
+│   │                       └───producer
+│   │                               Act.java
+│   │                               CitizenshipCatalog.java
+│   │                               CitizenshipCatalogResponse.java
+│   │                               InfocomService.java
+│   │                               InfocomServicePortType.java
+│   │                               Item.java
+│   │                               Items.java
+│   │                               NationalityCatalog.java
+│   │                               NationalityCatalogResponse.java
+│   │                               ObjectFactory.java
+│   │                               package-info.java
+│   │                               TestPortalMarriageFormToZags.java
+│   │                               TestPortalMarriageFormToZagsResponse.java
+│   │                               TestZagsCatalog.java
+│   │                               TestZagsCatalogResponse.java
+│   │                               TestZagsDataByPin.java
+│   │                               TestZagsDataByPinResponse.java
+│   │                               TestZagsDivorceRecords.java
+│   │                               TestZagsDivorceRecordsResponse.java
+│   │                               TestZagsEduCatalog.java
+│   │                               TestZagsEduCatalogResponse.java
+│   │                               TestZagsMaritalStatus.java
+│   │                               TestZagsMaritalStatusResponse.java
+│   │                               TestZagsMarriageRecords.java
+│   │                               TestZagsMarriageRecordsResponse.java
+│   │                               ZagsBirthList.java
+│   │                               ZagsBirthListResponse.java
+│   │                               ZagsCatalog.java
+│   │                               ZagsCatalogResponse.java
+│   │                               ZagsChildren.java
+│   │                               ZagsChildrenResponse.java
+│   │                               ZagsDataByPin.java
+│   │                               ZagsDataByPinExtended.java
+│   │                               ZagsDataByPinExtendedResponse.java
+│   │                               ZagsDataByPinResponse.java
+│   │                               ZagsDeathActByPin.java
+│   │                               ZagsDeathActByPinResponse.java
+│   │                               ZagsDeathList.java
+│   │                               ZagsDeathListResponse.java
+│   │                               ZagsDivorceList.java
+│   │                               ZagsDivorceListResponse.java
+│   │                               ZagsFIOByPin.java
+│   │                               ZagsFIOByPinResponse.java
+│   │                               ZagsMaritalStatus.java
+│   │                               ZagsMaritalStatusResponse.java
+│   │                               ZagsMarriageList.java
+│   │                               ZagsMarriageListResponse.java
+│   │                               ZagsMonitoringRecordsCount.java
+│   │                               ZagsMonitoringRecordsCountResponse.java
+│   │                               ZagsMonitoringRecordsPeriod.java
+│   │                               ZagsMonitoringRecordsPeriodResponse.java
+│   │                               ZagsPinAdoptionAct.java
+│   │                               ZagsPinAdoptionActResponse.java
+│   │                               ZagsPinBirthAct.java
+│   │                               ZagsPinBirthActResponse.java
+│   │                               ZagsPinDeathAct.java
+│   │                               ZagsPinDeathActResponse.java
+│   │                               ZagsPinDivorceAct.java
+│   │                               ZagsPinDivorceActResponse.java
+│   │                               ZagsPinMarriageAct.java
+│   │                               ZagsPinMarriageActResponse.java
+│   │                               ZagsPinNameChangeAct.java
+│   │                               ZagsPinNameChangeActResponse.java
+│   │                               ZagsPinPaternityAct.java
+│   │                               ZagsPinPaternityActResponse.java
+│   │                               ZagsPinRequest.java
+│   │                               ZagsPinRequestResponse.java
+│   │                               ZagsPinsByNSPDate.java
+│   │                               ZagsPinsByNSPDateResponse.java
+│   │                               ZagsStatement.java
+│   │                               ZagsStatementResponse.java
+│   │
+│   └───utils
+│           GlobalVariable.java
+│           IntegrationUtils.java
+│
+├───module
+│       NotaryModule.java
+├───provider
+│       BaseTundukProvider.java
+│       MinJustProvider.java
+│       PassportProvider.java
+│       VehicleProvider.java
+│       ZagsProvider.java
+├───service
+│   │   CompanyService.java
+│   │   DataApiService.java
+│   │   FileConverterService.java
+│   │   FileService.java
+│   │   MailService.java
+│   │   NotaryService.java
+│   │   PartnerService.java
+│   │   RatingCalculateService.java
+│   │   RegistrationService.java
+│   │   SaleOrderMailMessageService.java
+│   │   SourceTrustService.java
+│   │
+│   ├───impl
+│   │       NotaryServiceImpl.java
+│   │       PartnerServiceImpl.java
+│   │       SourceTrustServiceImpl.java
+│   │
+│   └───tunduk
+│       │   IndividualInfoService.java
+│       │   MinJustInfoService.java
+│       │   PassportInfoService.java
+│       │   TundukInfoService.java
+│       │   UnaaServiceInfo.java
+│       │   VehicleInfoService.java
+│       │   ZagsInfoService.java
+│       │
+│       └───impl
+│               IndividualInfoServiceImpl.java
+│               MinJustInfoServiceImpl.java
+│               PassportInfoServiceImpl.java
+│               UnaaServiceInfoImpl.java
+│               VehicleInfoServiceImpl.java
+│               ZagsInfoServiceImpl.java
+```
 
 ## 8. Конфигурация
 
-Объясните любые параметры конфигурации, переменные среды или параметры, которые можно настроить. Подробно о том, как
-настроить код для конкретных случаев использования.
+В axelor-config.properties нужно добавить ссылки(Url или Путь до файла) до wsdl.
+Например
+```properties
+integration.tunduk.minjust = file://<HOME>/wsdl/minjust.wsdl
+integration.tunduk.zags = <URL>/minjust.wsdl
+```
 
 ## 9. Примеры
 
 Если у вас есть доступ к репозиторию.
 
 - [Сервис низкого уровня](https://github.com/Tariel27/Notary-AOS/blob/dev/axelor-notary/src/main/java/com/axelor/notary/integrations/tunduk/service/minjust/MinJustService.java)
-- [
-  _Маппер_](https://github.com/Tariel27/Notary-AOS/blob/dev/axelor-notary/src/main/java/com/axelor/notary/integrations/tunduk/mapper/minjust/MinJustMapper.java)
-- [
-  _Хендлер_](https://github.com/Tariel27/Notary-AOS/blob/dev/axelor-notary/src/main/java/com/axelor/notary/integrations/tunduk/handler/MinJustHandler.java)
+- [_Маппер_](https://github.com/Tariel27/Notary-AOS/blob/dev/axelor-notary/src/main/java/com/axelor/notary/integrations/tunduk/mapper/minjust/MinJustMapper.java)
+- [_Хендлер_](https://github.com/Tariel27/Notary-AOS/blob/dev/axelor-notary/src/main/java/com/axelor/notary/integrations/tunduk/handler/MinJustHandler.java)
 - [Провайдер](https://github.com/Tariel27/Notary-AOS/blob/dev/axelor-notary/src/main/java/com/axelor/notary/provider/MinJustProvider.java)
-- [Сервис
-  _Impl_](https://github.com/Tariel27/Notary-AOS/blob/dev/axelor-notary/src/main/java/com/axelor/notary/service/tunduk/impl/MinJustInfoServiceImpl.java)
-
-## 10. Устранение неполадок
-
-Документируйте распространенные проблемы, сообщения об ошибках и их решения. Если применимо, включите раздел часто
-задаваемых вопросов.
+- [Сервис _Impl_](https://github.com/Tariel27/Notary-AOS/blob/dev/axelor-notary/src/main/java/com/axelor/notary/service/tunduk/impl/MinJustInfoServiceImpl.java)
 
 [^1]: Классы, которые были сгенерированы из WSDL.
