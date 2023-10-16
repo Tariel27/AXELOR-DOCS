@@ -2,6 +2,8 @@
 
 ### Оглавление
 
+1. [Введение](#1-введение)
+
 ### 1. Введение
 
 Единая автоматизированная информационная система (ЕАИС) - автоматизированный учет и контроль перемещаемых товаров и транспортных средств, а также декларирование товаров и транспортных средств, их таможенное оформление.
@@ -10,17 +12,17 @@
 ### 2. Предварительные условия
 
 Первым делом, мы должны получить от ЕАИС все нужные нам ссылки:
-1. WSDL - http://212.112.104.124:8122/TDService?wsdl
-2. XSD - http://212.112.104.124:8122/TDService?xsd=xsd0
+1. **WSDL** - http://212.xxx.104.xxx:xxxx/TDService?wsdl
+2. **XSD** - http://212.xxx.104.xxx:xxxx/TDService?xsd=xsd0
 
-Со стороны проекта "Навигационная пломба ГТС" технические условия:
-1. JDK 8 - 11
-2. База данных: PostgreSQL, MySQL
-3. Axelor v7.0.0 и выше
+Со стороны проекта **"Навигационная пломба ГТС"** технические условия:
+1. **JDK 8 - 11**
+2. База данных: **PostgreSQL, MySQL**
+3. **Axelor v7.0.0** и выше
 
 ### 3. Интеграция с ЕАИС - Генерация структуры и классов
 
-1. С помощью **WSDl** ссылки мы должны сгенерировать все нужные интерфейсы, сервисы и классы,
+1. С помощью **WSDl** ссылки мы должны сгенерировать все нужные интерфейсы, сервисы и классы.
 2. Мы должны у себя в проекте указать нужный путь, куда мы должы сгенерировать классы, например:
 ```
 C:\Users\...\IdeaProjects\Plomba\GovERP-master\modules\NavigationPlomb-AOS\electronic-navigation-seals\src\main\java\com\axelor\apps\ens\integrations\eais
@@ -31,7 +33,7 @@ wsimport -Xnocompile http://212.112.104.124:8122/TDService?wsdl
 ```
 4. Для **JDK 11** и выше вы должны использовать внешние библиотеки для генерации классов **Java** из **WSDL**.
 
-1. Добавьте зависимость:
+1. **Добавьте зависимость:**
 
 Если вы используете **Maven**, добавьте следующую зависимость:
 ```java
@@ -42,7 +44,7 @@ wsimport -Xnocompile http://212.112.104.124:8122/TDService?wsdl
 </dependency>
 ```
 
-2. Используйте инструмент **jaxb-xjc**:
+2. **Используйте инструмент **jaxb-xjc**:**
 
 После добавления зависимости вы можете использовать инструмент **jaxb-xjc** для генерации классов Java из WSDL:
 
@@ -50,7 +52,7 @@ wsimport -Xnocompile http://212.112.104.124:8122/TDService?wsdl
 xjc -wsdl http://212.112.104.124:8122/TDService?wsdl
 ```
 
-3. Для **Gradle** используйте следующий метод.
+3. **Для **Gradle** используйте следующий метод.**
 
 В вашем **build.gradle** файле добавьте следующую зависимость:
 
@@ -59,7 +61,7 @@ implementation 'org.glassfish.jaxb:jaxb-xjc:2.4.0-b180830.0438'
 ```
 Это добавит **jaxb-xjc** в ваш проект.
 
-4. Используйте инструмент **jaxb-xjc** через **Gradle**:
+4. **Используйте инструмент **jaxb-xjc** через **Gradle**:**
 
 Вы можете добавить задачу в ваш **build.gradle** для генерации классов из **WSDL**:
 
@@ -78,7 +80,7 @@ task generateJavaFromWsdl {
 ```
 Замените your.package.name на желаемое имя пакета для сгенерированных классов. После этого, когда вы запустите **./gradlew generateJavaFromWsdl**, **Gradle** выполнит задачу и сгенерирует классы Java из WSDL.
 
-5. Запуск:
+5. **Запуск:**
 
 После добавления задачи и зависимости, выполните следующую команду:
 ```java
@@ -87,7 +89,7 @@ task generateJavaFromWsdl {
 
 ### 3. Интеграция с ЕАИС - Создания класса сервиса
 
-1. После генерации классов, у себя  в проекте создаем специальный класс сервис - **EAIService**
+1. **После генерации классов, у себя  в проекте создаем специальный класс сервис - EAIService**
 ```java
 public interface EAIService {
 
@@ -280,7 +282,7 @@ public void setDeclarationFromOtherSystem(ActionRequest request, ActionResponse 
 
 ### 6. Интеграция с ЕАИС - Обновление существующей декларации
 
-1. Создается метод **updateDeclaration** внутри **DeclarationController**
+1. **Создается метод updateDeclaration внутри DeclarationController**
 ```java
 public void updateDeclaration(ActionRequest request, ActionResponse response) {
         try {
@@ -304,7 +306,7 @@ public void updateDeclaration(ActionRequest request, ActionResponse response) {
         }
     }
 ```
-Данный метод updateDeclaration предназначен для обновления декларации в контексте транспортной поездки (TransportationTrip).
+Данный метод **updateDeclaration** предназначен для обновления декларации в контексте транспортной поездки (TransportationTrip).
 
 1. Получение объекта **TransportationTrip** из запроса: Из **request** извлекается объект **TransportationTrip**.
 2. С помощью сервиса **eaiService** метод пытается получить новую декларацию на основе регистрационного номера существующей декларации.
@@ -475,9 +477,9 @@ private Declaration dataCheckingDeclaration(Declaration oldDeclaration, Declarat
         }
     }
 ```
-Метод **dataCheckingDeclaration** имеет функцию проверки и, при необходимости, обновления объекта Declaration.
+Метод **dataCheckingDeclaration** имеет функцию проверки и, при необходимости, обновления объекта **Declaration**.
 
-1. Проверка объектов декларации:
+1. **Проверка объектов декларации:**
 
 Если обе декларации **(oldDeclaration и newDeclaration)** не равны null:
 Некоторые атрибуты oldDeclaration (такие как RegistrationNumberTd, DepartureCountry, DestinationCountry и так далее) обновляются значениями из newDeclaration, если они различаются, с использованием функции **checkAndUpdate**.
