@@ -72,3 +72,49 @@ public class SseProvider  implements Provider<Sse> {
 
 ## Отправка событий клиенту
 
+В нашем проекте класс Observers  содержит компонент, который отвечает за отправку Server-Sent Events (SSE) клиентам после события TransportationTripSaved. Этот класс использует SseBroadcasterManager и OutboundSseEvent.Builder, чтобы создавать и отправлять события SSE.
+```java
+public class Observers {
+
+  private SseBroadcasterManager sseBroadcasterManager;
+  private OutboundSseEvent.Builder eventBuilder;
+  @Inject
+  public Observers(SseBroadcasterManager sseBroadcasterManager, Sse sse) {
+    this.sseBroadcasterManager = sseBroadcasterManager;
+    this.eventBuilder = sse.newEventBuilder();
+  }
+
+  private static final Logger LOG = LoggerFactory.getLogger(SseWebService.class);
+
+  void onSave(@Observes TransportationTripSaved tripSaved) {
+    try {
+      TransportationTrip trip = tripSaved.getTrip();
+      if (trip != null) {
+        if (trip.getMobileGroup() != null && !trip.getMobileGroup().getGroupStatus().equals(StatusConstants.MOBILE_GROUP_STATUS_ASSIGNED)
+                && trip.getMobileGroup().getGroupStatus().equals(StatusConstants.MOBILE_GROUP_STATUS_AVAILABLE)) {
+          JPA.runInTransaction(() -> trip.getMobileGroup().setGroupStatus(StatusConstants.MOBILE_GROUP_STATUS_PENDING));
+        }
+
+        sseBroadcasterManager.getBroadcaster().broadcast(eventBuilder
+                .data(TransportationTrip.class, trip)
+                .mediaType(MediaType.APPLICATION_JSON_TYPE)
+                .build());
+      }
+
+    } catch (Exception e) {
+      LOG.error("Exception in TransportationTripObserver onSave: {}", e.getMessage());
+    }
+  }
+}
+```
+
+### Момент отправки SSE
+```java
+sseBroadcasterManager.getBroadcaster().broadcast(eventBuilder
+        .data(TransportationTrip.class, trip)
+        .mediaType(MediaType.APPLICATION_JSON_TYPE)
+        .build());
+```
+- _sseBroadcasterManager.getBroadcaster()_: Получает экземпляр _SseBroadcaster_, который используется для отправки событий SSE клиентам. Этот экземпляр был предварительно настроен и управляется _SseBroadcasterManager_.
+- _.broadcast(eventBuilder ...)_: Использует метод broadcast для отправки события клиентам, зарегистрированным в данном SseBroadcaster.
+
