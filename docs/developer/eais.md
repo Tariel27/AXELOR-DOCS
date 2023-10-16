@@ -255,9 +255,9 @@ public void updateDeclaration(ActionRequest request, ActionResponse response) {
 3. С помощью **transportationTripService** обновляется декларация в контексте транспортной поездки.
 4. Если в процессе выполнения метода происходит исключение, оно перехватывается и устанавливается в ответ.
 
-### 6. Интеграция с ЕАИС - Обновление существующей декларации - Серис для сранение новой декларации со старой
+### 6. Интеграция с ЕАИС - Обновление существующей декларации - Сервис для сранение новой декларации со старой
 
-Метод **dataCheckingProducts:**
+#### Метод **dataCheckingProducts:**
 ```java
 private List<Product> dataCheckingProducts(Declaration oldDeclaration, Declaration newDeclaration){
         try {
@@ -333,25 +333,168 @@ private List<Product> dataCheckingProducts(Declaration oldDeclaration, Declarati
 ```
 Метод **dataCheckingProducts** принимает две декларации - старую (oldDeclaration) и новую (newDeclaration). Его цель - проверить и обновить список продуктов в старой декларации, согласно списку продуктов в новой декларации.
 
-1. Инициализация:
+1. **Инициализация:**
 
 Списки продуктов из обеих деклараций загружаются в oldProducts и newProducts.
 Создается список productsToRemove для продуктов, которые необходимо удалить из старой декларации.
 
-2. Сравнение продуктов:
+2. **Сравнение продуктов:**
 
 Для каждого продукта из oldProducts метод пытается найти соответствующий продукт в newProducts на основе hSCode.
 Если соответствующий продукт не найден в newProducts, он добавляется в список productsToRemove.
 Если найден - продукт из oldProducts обновляется данными из newProducts, если они различаются. Если были изменения, продукт сохраняется в базе данных с помощью crudService.
 
-3. Удаление продуктов:
+3. **Удаление продуктов:**
 
 Проходя по productsToRemove, метод удаляет каждый продукт из базы данных и из oldProducts.
 
+4. **Обработка ошибок:**
+
+Если в процессе выполнения метода происходит исключение, оно логируется и затем перевыбрасывается как EaisException.
+
+Основная идея этого метода - обеспечить актуальность списка продуктов в oldDeclaration по отношению к newDeclaration. Если в новой декларации появились изменения (новые продукты, измененные атрибуты или удаленные продукты), старая декларация обновляется соответственно.
+
+#### Метод **checkAndUpdate:**
+
+```java
+private <T> T checkAndUpdate(T oldValue, T newValue) {
+        if (oldValue == null || (newValue != null && !oldValue.equals(newValue))) {
+            return newValue;
+        }
+        return oldValue;
+    }
+```
+Этот метод **checkAndUpdate** представляет собой обобщенный (generic) метод, который принимает два значения: старое (oldValue) и новое (newValue). Метод проверяет, необходимо ли обновить oldValue значением newValue.
+
+#### Метод **dataCheckingVehicle:**
+
+```java
+private TransportationVehicle dataCheckingVehicle(Declaration oldDeclaration, Declaration newDeclaration) {
+        try {
+            TransportationVehicle oldVehicle = oldDeclaration.getTransportationVehicle();
+            TransportationVehicle newVehicle = newDeclaration.getTransportationVehicle();
+
+            if (oldVehicle != null && newVehicle != null) {
+
+                oldVehicle.setTransportType(checkAndUpdate(oldVehicle.getTransportType(), newVehicle.getTransportType()));
+                oldVehicle.setCountryRegVehicle(checkAndUpdate(oldVehicle.getCountryRegVehicle(), newVehicle.getCountryRegVehicle()));
+                oldVehicle.setPlateNo(checkAndUpdate(oldVehicle.getPlateNo(), newVehicle.getPlateNo()));
+
+            } else {
+                LOG.warn("One of the transportation vehicles is null. Old: " + oldVehicle + ", New: " + newVehicle);
+            }
+            return crudService.persistObject(oldVehicle);
+        } catch (Exception e) {
+            LOG.error("THROW: ", e);
+            throw new EaisException(e.getLocalizedMessage());
+        }
+    }
+```
+Метод **dataCheckingVehicle** предназначен для проверки и, при необходимости, обновления объекта **TransportationVehicle**, связанного с **Declaration**.
+
+#### Метод **dataCheckingDeclaration:**
+
+```java
+private Declaration dataCheckingDeclaration(Declaration oldDeclaration, Declaration newDeclaration) {
+        try {
+            if (oldDeclaration != null && newDeclaration != null) {
+
+                oldDeclaration.setRegistrationNumberTd(checkAndUpdate(oldDeclaration.getRegistrationNumberTd(), newDeclaration.getRegistrationNumberTd()));
+                oldDeclaration.setDepartureCountry(checkAndUpdate(oldDeclaration.getDepartureCountry(), newDeclaration.getDepartureCountry()));
+                oldDeclaration.setDestinationCountry(checkAndUpdate(oldDeclaration.getDestinationCountry(), newDeclaration.getDestinationCountry()));
+                oldDeclaration.setCounterpartyName(checkAndUpdate(oldDeclaration.getCounterpartyName(), newDeclaration.getCounterpartyName()));
+                oldDeclaration.setCountryRegistration(checkAndUpdate(oldDeclaration.getCountryRegistration(), newDeclaration.getCountryRegistration()));
+                oldDeclaration.setFullNameDriver(checkAndUpdate(oldDeclaration.getFullNameDriver(), newDeclaration.getFullNameDriver()));
+                oldDeclaration.setCountryDriver(checkAndUpdate(oldDeclaration.getCountryDriver(), newDeclaration.getCountryDriver()));
+                oldDeclaration.setCustomsDeparture(checkAndUpdate(oldDeclaration.getCustomsDeparture(), newDeclaration.getCustomsDeparture()));
+                oldDeclaration.setCustomsDestination(checkAndUpdate(oldDeclaration.getCustomsDestination(), newDeclaration.getCustomsDestination()));
+            } else {
+                LOG.warn("One of the declarations is null. Old: " + oldDeclaration + ", New: " + newDeclaration);
+            }
+
+            return crudService.persistObject(oldDeclaration);
+        } catch (Exception e) {
+            LOG.error("THROW: ", e);
+            throw new EaisException(e.getLocalizedMessage());
+        }
+    }
+```
+Метод dataCheckingDeclaration имеет функцию проверки и, при необходимости, обновления объекта Declaration.
+
+1. Проверка объектов декларации:
+
+Если обе декларации (oldDeclaration и newDeclaration) не равны null:
+Некоторые атрибуты oldDeclaration (такие как RegistrationNumberTd, DepartureCountry, DestinationCountry и так далее) обновляются значениями из newDeclaration, если они различаются, с использованием функции **checkAndUpdate**.
+
+2. **Предупреждение при отсутствии одной из деклараций:**
+
+Если одна из деклараций равна null, выводится предупреждение с указанием, какая из деклараций отсутствует.
+
+3. **Сохранение и возврат:**
+
+Обновленный **oldDeclaration** сохраняется с помощью **crudService** и возвращается.
+
+4. **Обработка ошибок:**
+
+Любое возникшее исключение логируется, а затем выбрасывается как **EaisException**.
+
+Этот метод особенно полезен, когда у вас есть две версии декларации, и вы хотите обновить старую версию с учетом изменений, найденных в новой версии, сохраняя при этом данные, которые остались неизменными.
+
+#### Метод **saveDeclaration:**
+
+```java
+public TransportationTrip saveDeclaration(TransportationTrip trip,Declaration oldDeclaration, Declaration newDeclaration) {
+        try {
+
+            TransportationTrip transportationTrip = transportationTripRepository.find(trip.getId());
+            transportationTrip.getDeclaration().setTransportationVehicle(dataCheckingVehicle(oldDeclaration, newDeclaration));
+            transportationTrip.getDeclaration().setProduct(dataCheckingProducts(oldDeclaration, newDeclaration));
+            transportationTrip.setDeclaration(dataCheckingDeclaration(oldDeclaration, newDeclaration));
+
+            TransportationTrip transportationTripSaved = crudService.persistObject(transportationTrip);
+
+            return transportationTripSaved;
+        } catch (Exception e) {
+            LOG.error("THROW: ", e);
+            throw new EaisException(e.getLocalizedMessage());
+        }
+    }
+```
+
+Метод **saveDeclaration** предназначен для обновления **TransportationTrip** на основе данных из двух версий декларации: старой (**oldDeclaration**) и новой (**newDeclaration**).
+
+1. **Извлечение существующего объекта TransportationTrip:**
+
+Метод извлекает TransportationTrip из репозитория по ID, полученному из переданного объекта trip.
+
+2. **Обновление транспортного средства в декларации:**
+
+Метод вызывает функцию dataCheckingVehicle, чтобы проверить и, при необходимости, обновить транспортное средство в декларации на основе различий между старой и новой декларацией.
+
+3. **Обновление продуктов в декларации:**
+
+Метод вызывает функцию dataCheckingProducts для проверки и обновления списка продуктов в декларации.
+
+4. **Обновление декларации:**
+
+Метод вызывает функцию dataCheckingDeclaration, чтобы проверить и, при необходимости, обновить атрибуты декларации.
+
+5. **Сохранение и возврат:**
+
+Обновленный TransportationTrip сохраняется с помощью crudService и возвращается.
+
+6. **Обработка ошибок:**
+
+Если во время выполнения метода возникает исключение, оно логируется, и затем выбрасывается как EaisException.
+
+Метод saveDeclaration является ключевым для обновления транспортной поездки на основе изменений в декларациях. Если вы изменяете данные в другой системе или из другого источника, этот метод позволит обновить вашу текущую систему, чтобы она соответствовала последним данным.
 
 
 
 
+
+
+    
 
 
 
