@@ -6,7 +6,7 @@
 2. [Предварительные условия](#2-предварительные-условия)
 3. [Установка](#3-установка)
 4. [Реализация](#4-реализация)
-5. [Конфигурация](#4-конфигурация)
+5. [Конфигурация](#5-конфигурация)
 
 ## 1. Описание задачи
 
@@ -48,9 +48,9 @@ public void executeInThread(JobExecutionContext context) {
 ```
 ## 5. Конфигурация
 
-Заходим в нужную нам директорию: **Administration** -> **Job management** - > **All schedules**
+Заходим в нужную нам директорию: **Administration** -> **Job management** - > **All schedules**. 
 Нужно создать новую работу. Выбираем нужную нам работу. Указываем периодичность.
 
-![Job management](docs/developer/img/cron.png)
-![Setup via Axelor](docs/developer/img/setupCron.png)
+![Job management](https://github.com/Tariel27/AXELOR-DOCS/blob/main/docs/developer/img/cron.png)
+![Setup via Axelor](https://github.com/Tariel27/AXELOR-DOCS/blob/main/docs/developer/img/setupCron.png)
 
