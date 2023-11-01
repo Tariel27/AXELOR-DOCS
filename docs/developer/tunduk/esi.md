@@ -1,12 +1,17 @@
 # Интеграция ЕСИ
 
 ## Endpoints:
-  https://{base_url}/axelor-erp/login/esi-link - Генерирует ссылку для входа через ЕСИ.
+  ПИ:
+    https://{base_url}/sanarip-tamga/esi-link - Генерирует ссылку для входа через ЕСИ
+    
+    https://{base_url}/sanarip-tamga/esi-auth?code={code_value} - запрашивает мета данные на основе полученного 'code', аутентифицирует и авторизует пользователя.
 
-  ПИ: https://{base_url}/sanarip-tamga/esi-auth?code={code_value}
-  
-  Нотариус: https://{base_url}/login/esi?code={code_value}.
-
+    
+  Нотариус: 
+    https://{base_url}/notary/login/esi-link - Генерирует ссылку для входа через ЕСИ.
+    
+    https://{base_url}/notary/login/esi?code={code_value} - запрашивает мета данные на основе полученного 'code', аутентифицирует и авторизует пользователя.
+    
 
 ## Документация по интеграции системы аутентификации и авторизации через ЕСИ (Единую Систему Идентификации)
 
