@@ -1,13 +1,21 @@
 # Интеграция ЕСИ
 
 ## Endpoints:
-  ПИ:
-    https://{base_url}/sanarip-tamga/esi-link - Генерирует ссылку для входа через ЕСИ
+  Санарип Тамга:
+  
+    https://{base_url}/sanarip-tamga/esi-link - Генерирует ссылку для входа через ЕСИ без state
     
-    https://{base_url}/sanarip-tamga/esi-auth?code={code_value} - запрашивает мета данные на основе полученного 'code', аутентифицирует и авторизует пользователя.
+    https://{base_url}/sanarip-tamga/esi-link?state={state_value} - Генерирует ссылку для входа через ЕСИ с state
+    
+    https://{base_url}/sanarip-tamga/esi-data?state={state_value} - Получение code авторизации.
+    
+    https://{base_url}/sanarip-tamga/esi-auth?code={code_value} - запрашивает мета данные на основе 
+    полученного 'code', аутентифицирует и авторизует пользователя.
+    
 
     
   Нотариус: 
+  
     https://{base_url}/notary/login/esi-link - Генерирует ссылку для входа через ЕСИ.
     
     https://{base_url}/notary/login/esi?code={code_value} - запрашивает мета данные на основе полученного 'code', аутентифицирует и авторизует пользователя.
@@ -38,6 +46,9 @@
 5. **Аутентификация и авторизация пользователя**: 
     - Мы аутентифицируем пользователя и с помощью группы (у каждой группы есть свои разрешения (permissions)) авторизуем его.
     - В ответе на фронт в заголовках возвращаем куки и логин пользователя.
+  
+
+## Нотариус:
   
 ```java
 public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -87,7 +98,11 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
 
     }
 ```
+
+
 #### Мы произвели интгерацию ЕСИ по документации от Tunduk.
-#### Ссылка https://wiki.tunduk.kg/doku.php?id=iis-info&s[]=еси#протокол_работы_еси
+#### Ссылка 
+
+      https://wiki.tunduk.kg/doku.php?id=iis-info&s[]=еси#протокол_работы_еси
 
 Это общий обзор процесса интеграции системы аутентификации и авторизации через ЕСИ.
