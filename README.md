@@ -12,5 +12,5 @@ chmod +x export.sh
 ## Запуск 
 ```bash
 cd ~/<user-path>/AXELOR-DOCS
-./export.sh\
+./export.sh
 ```
