@@ -14,3 +14,4 @@ chmod +x export.sh
 cd ~/<user-path>/AXELOR-DOCS
 ./export.sh
 ```
+Далее вы сможете найти сгенерированный файл в `~/` 
