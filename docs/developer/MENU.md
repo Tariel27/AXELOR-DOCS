@@ -19,6 +19,7 @@
 - Правильное использования
 
 ## Оглавление
+- [Документация по развертыванию проекта Axelor](./deployment/deployment.md)
 - [i18n для AngularJs](./i18n/i18n.md)
 - [Еси](./tunduk/esi)
 - [Интеграция с Тундук](./tunduk/integration.md)
