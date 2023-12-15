@@ -85,7 +85,7 @@
 ```
 ### Gradle:
 
-```xml
+```gradle
 `dependencies {
     // ... Другие зависимости
 
