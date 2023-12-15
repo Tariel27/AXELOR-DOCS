@@ -28,7 +28,7 @@
 
 ### Тело Запроса
 
-```javascript
+```json
 `{
   "hash": "d41d8cd98f00b204e9800998ecf8427e",
   "file": "base64_encoded_file_data"
@@ -39,7 +39,7 @@
 
 ### Успешный Ответ
 
-```javascript
+```json
 `{
   "status": "success",
   "message": "Signature verification success"
@@ -49,7 +49,7 @@
 
 ### Ошибка Ответа
 
-```javascript
+```json
 `{
   "status": "error",
   "message": "Serial number does not match. Signature verification FAILED!"
